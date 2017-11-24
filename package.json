@@ -1,0 +1,30 @@
+{
+  "name": "koa",
+  "version": "1.0.0",
+  "description": "a koa demo",
+  "main": "app.js",
+  "scripts": {
+    "test": "corss-env NODE_ENV=test node app.js"
+  },
+  "keywords": [
+    "koa",
+    "node"
+  ],
+  "author": "hetanhong",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.17.1",
+    "bluebird": "^3.5.1",
+    "bookshelf": "^0.11.1",
+    "knex": "^0.13.0",
+    "koa": "^2.4.1",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.3.0",
+    "koa-static": "^4.0.2",
+    "md5": "^2.2.1",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.1.1"
+  }
+}
