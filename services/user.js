@@ -34,15 +34,17 @@ user.login = async (ctx) => {
     if (!mobile || !password) {
         throw new CustomError(400, 'arguments error ');
     }
-    let users = await  Users.forge({module, password}).fetchAll()
+    let userInfo = await  new Users({mobile, password}).fetch()
         .then(users => {
-        return users.toJSON();
-    });
-    if (users.length) {
-        return users[0];
-    } else {
-        throw new CustomError(403, 'password or mobile error');
-    }
+            if (users) {
+                return users.toJSON();
+            }
+            else {
+                throw new CustomError(403, 'password or mobile error');
+            }
+
+        });
+    return userInfo;
 };
 user.getPages = async (ctx) => {
     let then = new Date().getTime();
