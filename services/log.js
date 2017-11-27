@@ -1,17 +1,17 @@
 /**
  * Created by DELL on 2017/11/24.
  */
-const Logs = require('../models/log');
+const Log = require('../models/log');
 const log = {};
-log.creatLog = async (ctx) => {
+log.create = async (ctx) => {
     let userInfo = ctx.session.userInfo;
     let user_id = userInfo.uuid;
     let {type} = ctx.request.body;
-    return new Logs({user_id, type}).save();
+    return new Log({user_id, type}).save();
 };
-log.getLogs = async (ctx) => {
+log.getAll = async (ctx) => {
     let userInfo = ctx.session.userInfo;
     let {uuid} = userInfo;
-    return Logs.where({user_id: uuid}).fetchAll();
+    return Log.where({user_id: uuid}).fetchAll();
 };
 module.exports = log;

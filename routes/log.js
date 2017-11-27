@@ -15,10 +15,10 @@ log.use(async (ctx, next) => {
         throw new CustomError(401, 'need login');
     }
 });
-log.get('/getLogs', async (ctx) => {
-    return logService.getLogs(ctx);
+log.get('/getAll', async (ctx) => {
+    return logService.getAll(ctx);
 });
 log.post('/create', async (ctx) => {
-    return logService.creatLog(ctx);
+    return logService.create(ctx);
 });
 module.exports = log;

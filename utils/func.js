@@ -1,8 +1,8 @@
 /**
  * Created by DELL on 2017/11/24.
  */
-const fun = {};
-fun.getRandText = (len = 16) => {
+const func = {};
+func.createRandomString = (len = 16) => {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let length = possible.length;
@@ -11,4 +11,4 @@ fun.getRandText = (len = 16) => {
 
     return text;
 }
-module.exports = fun;
+module.exports = func;
