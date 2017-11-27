@@ -2,11 +2,7 @@
  * Created by DELL on 2017/11/27.
  */
 const bs = require('../bs');
-require('./log');
-const Users = bs.model('user', {
-    tableName: 'users',
-    logs: () => {
-        return this.hasMany('log');
-    }
+const User = bs.Model.extend( {
+    tableName: 'users'
 });
-module.exports = Users;
+module.exports = User;

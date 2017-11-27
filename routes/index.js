@@ -24,7 +24,6 @@ const init = (app) => {
     router.use(async (ctx, next) => {
         try {
             let data = await  next();
-            console.log(data)
             ctx.body = {
                 code: 200,
                 data,

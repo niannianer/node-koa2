@@ -4,6 +4,6 @@
 const bookshelf = require('bookshelf');
 const knex = require('./knex-action');
 const bs =bookshelf(knex);
-bs.plugin('registry')
-bs.plugin('pagination')
+bs.plugin('registry');
+bs.plugin('pagination');
 module.exports = bs;
