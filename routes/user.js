@@ -24,7 +24,7 @@ user.use(async (ctx, next) => {
     }
 });
 user.post('/logout', async (ctx) => {
-    ctx.session.userInfo = null;
+    ctx.session = null;
     return 'logout';
 });
 user.get('/pages', async (ctx) => {
