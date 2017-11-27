@@ -1,12 +1,10 @@
 /**
  * Created by DELL on 2017/11/24.
  */
-const bs = require('../bs');
-const Logs = bs.Model.extend({
-    tableName: 'logs'
-});
+const Logs = require('../models/log');
 const log = {};
-log.write = async (ctx) => {
+log.creatLog = async (ctx) => {
+
     return [];
 
 };

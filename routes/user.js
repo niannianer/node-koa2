@@ -4,16 +4,30 @@
 const Router = require('koa-router');
 const user = new Router();
 const userService = require('../services/user');
-user.get('/pages', async (ctx) => {
-    return userService.getPages(ctx);
-});
+const CustomError = require('../utils/custom-error');
+
 user.post('/register', async (ctx) => {
     return userService.register(ctx);
 });
 user.post('/login', async (ctx, next) => {
     return userService.login(ctx);
 });
-user.post('/logout', async (ctx, next) => {
-    ctx.body = 'logout';
+
+
+// auth identify  middleware
+user.use(async (ctx, next) => {
+    let {userInfo} = ctx.session;
+    if (userInfo && userInfo['user_id']) {
+        return await next();
+    } else {
+        throw new CustomError(401, 'need login');
+    }
+});
+user.post('/logout', async (ctx) => {
+    ctx.session.userInfo = null;
+    return 'logout';
+});
+user.get('/pages', async (ctx) => {
+    return userService.getPages(ctx);
 });
 module.exports = user;

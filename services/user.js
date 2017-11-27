@@ -1,12 +1,9 @@
 /**
  * Created by DELL on 2017/11/24.
  */
-const bs = require('../bs');
 const fun = require('../utils/fun');
 const CustomError = require('../utils/custom-error');
-const Users = bs.Model.extend({
-    tableName: 'users'
-});
+const Users = require('../models/user');
 const user = {};
 user.register = async (ctx) => {
     let {body} = ctx.request;
@@ -19,11 +16,18 @@ user.register = async (ctx) => {
     if (!mobile || !password) {
         throw new CustomError(400, 'arguments error ');
     }
-    let users = await Users.forge({mobile}).fetchAll();
-    if (users.length) {
+    let users = await new Users({mobile}).fetch()
+        .then(users => {
+            if (users) {
+                return users.toJSON();
+            } else {
+                return null;
+            }
+        });
+    if (users) {
         throw  new CustomError(402, ' this mobile has registered ');
     }
-    return Users.forge({mobile, password, user_name, user_id}).save();
+    return new Users({mobile, password, user_name, user_id}).save();
 };
 user.login = async (ctx) => {
     let {body} = ctx.request;
@@ -44,11 +48,13 @@ user.login = async (ctx) => {
             }
 
         });
+    ctx.session.userInfo = userInfo;
     return userInfo;
 };
 user.getPages = async (ctx) => {
     let then = new Date().getTime();
     let time = new Date().getTime() - then;
+    console.log(`${ctx.url} get many pages  cost ${time}`);
     return `${ctx.url} get many pages  cost ${time}`;
 };
 module.exports = user;
