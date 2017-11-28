@@ -9,7 +9,7 @@ const file = {};
 file.upload = async (ctx) => {
     const file = ctx.request.body.files.file;
     let relativePath = `/files/${func.createRandomString()}-${file.name}`;
-    let filepath = path.resolve(__dirname, '../static/files/' + func.createRandomString() + '-' + file.name);
+    let filepath = path.resolve(__dirname, path.join(`../static`, relativePath));
     let result = await  moveFile(file, filepath);
     if (result) {
         return relativePath;
