@@ -5,6 +5,7 @@ const Router = require('koa-router');
 const router = new Router();
 const user = require('./user');
 const log = require('./log');
+const file =require('./file');
 
 
 const init = (app) => {
@@ -47,6 +48,7 @@ const init = (app) => {
     // 装载所有子路由
     router.use('/user', user.routes(), user.allowedMethods());
     router.use('/log', log.routes(), log.allowedMethods());
+    router.use('/file', file.routes(), file.allowedMethods());
     //  加载路由中间件
     app.use(router.routes()).use(router.allowedMethods());
 }
