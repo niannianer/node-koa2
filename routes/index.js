@@ -5,20 +5,17 @@ const Router = require('koa-router');
 const router = new Router();
 const user = require('./user');
 const log = require('./log');
-const file =require('./file');
+const file = require('./file');
 
 
 const init = (app) => {
-
-    // add cors middleware
-    router.use(async (ctx, next) => {
-        let res = ctx.response;
-        let origin = ctx.request.get('Origin');
-        res.set('Access-Control-Allow-Origin', origin);
-        res.set('Access-Control-Allow-Credentials', true);
-        res.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-        res.set('Access-Control-Allow-Headers', 'X-Requested-With');
-        res.set('Access-Control-Allow-Headers', 'Content-Type');
+// add cors middleware
+    app.use(async (ctx, next) => {
+        let origin = ctx.get('Origin');
+        ctx.set('Access-Control-Allow-Origin', origin);
+        ctx.set('Access-Control-Allow-Credentials', true);
+        ctx.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+        ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         await  next();
     });
     // add error hand middleware

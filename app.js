@@ -7,6 +7,7 @@ const static = require('koa-static');
 const app = new Koa();
 const routes = require('./routes');
 
+
 // 静态资源目录对于相对入口文件app.js的路径
 const staticPath = './static';
 app.use(static(path.join(__dirname, staticPath)));
