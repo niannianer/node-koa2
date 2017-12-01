@@ -12,6 +12,6 @@ log.create = async (ctx) => {
 log.getAll = async (ctx) => {
     let userInfo = ctx.session.userInfo;
     let {uuid} = userInfo;
-    return Log.where({user_id: uuid}).fetchAll();
+    return Log.where({user_id: uuid}).fetchAll({withRelated:'user'});
 };
 module.exports = log;

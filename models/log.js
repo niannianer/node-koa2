@@ -2,7 +2,11 @@
  * Created by DELL on 2017/11/27.
  */
 const bs = require('../bs');
-const Log = bs.Model.extend({
-    tableName: 'logs'
+const user = require('./user');
+const Logs = bs.model('log', {
+    tableName: 'logs',
+    user: function () {
+        return this.belongsTo(user,'user_id','uuid');
+    }
 });
-module.exports = Log;
+module.exports = Logs;

@@ -16,6 +16,10 @@ const init = (app) => {
         ctx.set('Access-Control-Allow-Credentials', true);
         ctx.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
         ctx.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        let method = ctx.method;
+        if ('OPTIONS' == method) {
+            return ctx.body = 'options';
+        }
         await  next();
     });
     // add error hand middleware
