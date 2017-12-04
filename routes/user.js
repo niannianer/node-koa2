@@ -17,7 +17,7 @@ user.post('/login', async (ctx, next) => {
 // auth identify  middleware
 user.use(async (ctx, next) => {
     let {userInfo} = ctx.session;
-    if (userInfo && userInfo['uuid']) {
+    if (userInfo && userInfo['id']) {
         return await next();
     } else {
         throw new CustomError(401, 'need login');

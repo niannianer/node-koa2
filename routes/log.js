@@ -9,7 +9,7 @@ const logService = require('../services/log');
 // auth identify  middleware
 log.use(async (ctx, next) => {
     let {userInfo} = ctx.session;
-    if (userInfo && userInfo['uuid']) {
+    if (userInfo && userInfo['id']) {
         return await next();
     } else {
         throw new CustomError(401, 'need login');

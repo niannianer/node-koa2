@@ -5,13 +5,11 @@ const Log = require('../models/log');
 const log = {};
 log.create = async (ctx) => {
     let userInfo = ctx.session.userInfo;
-    let user_id = userInfo.uuid;
+    let user_id = userInfo.id;
     let {type} = ctx.request.body;
     return new Log({user_id, type}).save();
 };
-log.getAll = async (ctx) => {
-    let userInfo = ctx.session.userInfo;
-    let {uuid} = userInfo;
-    return Log.where({user_id: uuid}).fetchAll({withRelated:'user'});
+log.getAll = async () => {
+    return Log.forge().fetchAll({withRelated: 'user'});
 };
 module.exports = log;

@@ -3,6 +3,7 @@
  */
 const bs = require('../bs');
 const User = bs.Model.extend( {
-    tableName: 'users'
+    tableName: 'users',
+    uuid:true
 });
 module.exports = User;

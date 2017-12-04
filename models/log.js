@@ -6,7 +6,7 @@ const user = require('./user');
 const Logs = bs.model('log', {
     tableName: 'logs',
     user: function () {
-        return this.belongsTo(user,'user_id','uuid');
+        return this.belongsTo(user,'user_id','id');
     }
 });
 module.exports = Logs;

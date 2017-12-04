@@ -1,7 +1,6 @@
 exports.up = async function (knex, Promise) {
     await knex.schema.createTable('users', users => {
-        users.increments('id').primary();
-        users.string('uuid').unique().notNullable(); //userid
+        users.string('id').primary();
         users.string('mobile').unique().notNullable();
         users.string('user_name').nullable();
         users.string('password').notNullable();
@@ -11,7 +10,7 @@ exports.up = async function (knex, Promise) {
     await knex.schema.createTable('logs', logs => {
         logs.increments('id').primary();
         logs.string('user_id').notNullable();
-        logs.foreign('user_id').references('uuid').inTable('users');
+        logs.foreign('user_id').references('id').inTable('users');
         logs.string('type');
         logs.timestamp('created_at').defaultTo(knex.fn.now());
 

@@ -12,7 +12,6 @@ user.register = async (ctx) => {
     }
     let {mobile, password, userName} = body;
     let user_name = userName || '';
-    let uuid = func.createRandomString(32);
     if (!mobile || !password) {
         throw new CustomError(400, 'arguments error ');
     }
@@ -27,7 +26,7 @@ user.register = async (ctx) => {
     if (users) {
         throw  new CustomError(402, ' this mobile has registered ');
     }
-    return new User({mobile, password, user_name, uuid}).save();
+    return new User({mobile, password, user_name}).save();
 };
 user.login = async (ctx) => {
     let {body} = ctx.request;
