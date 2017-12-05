@@ -29,6 +29,7 @@
   * 浏览器支持在 API 容器中（例如 XMLHttpRequest 或 Fetch ）使用 CORS，以降低跨域 HTTP 请求所带来的风险。
   * CORS 需要客户端和服务器同时支持。目前，所有浏览器都支持该机制（IE 10 提供了对规范的完整支持，但在较早版本（8 和 9）中，
    CORS 机制是借由 XDomainRequest 对象完成）。
+   
 ```javascript
 // client
 // origin ：https://zj-static.zj-hf.cn
@@ -38,11 +39,14 @@
      request.onreadystatechange = handler;
      request.send(); 
 ```
+
+
 ```javascript
 // server 
       res.header("Access-Control-Allow-Origin", '*');  // 允许所有域名访问
       res.header('Access-Control-Allow-Credentials', false); // 不携带身份信息
 ```
+
 ## 预检请求
 *  “需预检的请求”要求必须先使用 OPTIONS   
 方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。
@@ -52,7 +56,9 @@
    * 人为设置了对 CORS 安全的首部字段集合之外的其他首部字段。
    该集合为：Accept，Accept-Language，Content-Language，Content-Type，DPR，Downlink，Save-Data，Viewport-Width，Width。
    * Content-Type 的值不属于下列之一:application/x-www-form-urlencoded，multipart/form-data，text/plain
+
 ```javascript
+
 // client
 // origin ：https://zj-static.zj-hf.cn
 
@@ -67,6 +73,7 @@
 ```
 
 ```javascript
+ 
  // server 
  // add cors middleware
      app.use(async (ctx, next) => {
@@ -82,6 +89,7 @@
          await  next();
      });
 ```
+
 ## 简单请求
 * 某些请求不会触发 CORS 预检请求，称为简单请求。
 * 简单请求必须满足下列条件。
@@ -97,6 +105,7 @@
 和 HTTP 认证信息发送身份凭证。对于跨域 XMLHttpRequest 或 Fetch 请求，
 浏览器默认不会发送身份凭证信息。如果要发送凭证信息，
 需要设置 XMLHttpRequest 的某个特殊标志位--withCredentials。
+
 ```javascript
 // client
 // origin ：https://zj-static.zj-hf.cn
@@ -110,6 +119,7 @@
    request.send(body); 
 
 ```
+
 ```javascript
 // server 
 user.login = async (ctx) => {
@@ -133,6 +143,7 @@ user.login = async (ctx) => {
     return userInfo;
 };
 ```
+
 ```javascript
 // client
 // origin ：https://zj-static.zj-hf.cn
@@ -145,6 +156,7 @@ user.login = async (ctx) => {
    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // 
    request.send(); 
 ```
+
 ```javascript
 
 // server 
@@ -157,6 +169,7 @@ user.getInfo = async (ctx) => {
     return userInfo;
 };
 ```
+
 ###  cookie 作为身份凭证： 
   * cookie认证流程 
     - login
@@ -166,21 +179,26 @@ user.getInfo = async (ctx) => {
     - userInfo
   * 使用cookie作为认证凭证有一些不方便，比如不能跨平台，当有多个客户端平台调用同一个服务端时，
   需要根据不同的平台设置不同的返回头部。
+  
   ```javascript
     ctx.set('Access-Control-Allow-Origin', 'https://zj-static.zj-hf.cn');
     ctx.set('Access-Control-Allow-Origin', 'https://zj-static.zj-wm.cn');
   ```
+  
   * 当服务端把用户信息清空之后（比如服务重启，清空redis等操作），用户登录状态消失。
 
 ##  附带身份凭证的请求--token
 
 * 使用token验证方式，可以允许任何其他域名的请求访问。
+
 ```javascript
   ctx.set('Access-Control-Allow-Origin', '*');// 允许所有域名访问
 ```
+
 * 客户端使用用户名跟密码请求登录
 * 服务端收到请求，去验证用户名与密码
 * 验证成功后，服务端会签发一个 Token，再把这个 Token 发送给客户端
+
 ```javascript
     ctx.body = {
                 code: 200,
@@ -188,19 +206,26 @@ user.getInfo = async (ctx) => {
                 msg: 'ok'
             }
 ```
+
 * 客户端收到 Token 以后可以把它存储起来，比如放在 Cookie 里或者 Local Storage 里
+
 ```javascript
 localStorage.setItem('auth_token',data.token);
 ```
+
 * 客户端每次向服务端请求资源的时候需要带着服务端签发的 Token
+
 ```javascript
  var request = new XMLHttpRequest();
  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // 
  request.setRequestHeader('Auth-Token', localStorage.getItem('auth_token')); // 
 ```
+
 * 服务端收到请求，验证Token，如果成功，就向客户端返回请求的数据
+
 ```javascript
      ctx.set('Access-Control-Allow-Headers', 'Content-Type,Auth-Token');
      let  token = ctx.get('Auth-Token');
      verify(token);
 ```
+
