@@ -16,9 +16,10 @@ const init = (app) => {
         ctx.set('Access-Control-Allow-Credentials', true);
         ctx.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
         ctx.set('Access-Control-Allow-Headers', ',X-Requested-With, Content-Type, Accept');
+        ctx.set('Access-Control-Max-Age', 24*60*60);
         let method = ctx.method;
         if ('OPTIONS' == method) {
-            return ctx.body = 'options';
+            ctx.status = 204;
         }
         await  next();
     });

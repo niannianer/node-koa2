@@ -82,9 +82,10 @@
          ctx.set('Access-Control-Allow-Credentials', false);
          ctx.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
          ctx.set('Access-Control-Allow-Headers', 'X-PINGOTHER, Content-Type');
+         ctx.set('Access-Control-Max-Age', 24*60*60); // 设置预检请求缓存时间
          let method = ctx.method;
          if ('OPTIONS' === method) {
-             return ctx.body = 'options';
+               ctx.status = 204;// 204 表示告知客户端相应成功
          }
          await  next();
      });
@@ -172,11 +173,23 @@ user.getInfo = async (ctx) => {
 
 ###  cookie 作为身份凭证： 
   * cookie认证流程 
-    - login
-    - cookies.set('cid',encrypt)，save(userInfo)
-    - next request  withCredentials 
-    - ctx.cookies.get('cid')
-    - userInfo
+    - 客户端根据用户名、密码或者验证码登录
+    - 服务端验证正确之后将cookie设置到response里，同时将用户信息或者用户id储存到session中。
+
+    ```javascript
+      cookies.set('cid',encrypt);
+      session.set(encrypt,userInfo)
+    ```
+    - 客户端发出携带cookie的请求
+    - 服务端从cookie里取出cid，进行校验
+
+     ```javascript
+      let cid = ctx.cookies.get('cid')
+      
+      let userInfo = session.get(cid)
+    ```
+   
+    - 校验成功后，返回相应数据
   * 使用cookie作为认证凭证有一些不方便，比如不能跨平台，当有多个客户端平台调用同一个服务端时，
   需要根据不同的平台设置不同的返回头部。
   
@@ -228,4 +241,5 @@ localStorage.setItem('auth_token',data.token);
      let  token = ctx.get('Auth-Token');
      verify(token);
 ```
+
 
