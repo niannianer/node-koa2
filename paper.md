@@ -98,7 +98,7 @@
    Accept，Accept-Language，Content-Language，Content-Type，DPR，Downlink，Save-Data，Viewport-Width，Width。
    * Content-Type 的值仅限于下列三者之一：
    application/x-www-form-urlencoded，multipart/form-data，text/plain。
-   * 简单请求将直接发送实际请求。
+ * 简单请求将直接发送实际请求。
    
 ##  附带身份凭证的请求--cookie
 * Fetch 与 CORS 的一个特性是，可以基于  HTTP cookies 
