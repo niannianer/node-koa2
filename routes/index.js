@@ -16,7 +16,7 @@ const init = (app) => {
         ctx.set('Access-Control-Allow-Credentials', true);
         ctx.set('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
         ctx.set('Access-Control-Allow-Headers', ',X-Requested-With, Content-Type, Accept');
-        ctx.set('Access-Control-Max-Age', 24*60*60);
+        ctx.set('Access-Control-Max-Age', 24 * 60 * 60);
         let method = ctx.method;
         if ('OPTIONS' == method) {
             ctx.status = 204;
@@ -34,16 +34,9 @@ const init = (app) => {
             }
         }
         catch (err) {
-            if (err.name === 'CustomError') {
-                ctx.body = {
-                    code: err.code,
-                    msg: err.message
-                }
-            } else {
-                ctx.body = {
-                    code: 500,
-                    msg: err.message || err
-                }
+            ctx.body = {
+                code: err.code || 500,
+                msg: err.message || err
             }
         }
     });

@@ -4,8 +4,6 @@
 const Router = require('koa-router');
 const user = new Router();
 const userService = require('../services/user');
-const CustomError = require('../utils/custom-error');
-
 user.post('/register', async (ctx) => {
     return userService.register(ctx);
 });
@@ -20,7 +18,9 @@ user.use(async (ctx, next) => {
     if (userInfo && userInfo['id']) {
         return await next();
     } else {
-        throw new CustomError(401, 'need login');
+        let err = new Error('need login');
+        err.code = 401;
+        throw err;
     }
 });
 user.post('/logout', async (ctx) => {

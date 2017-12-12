@@ -3,8 +3,6 @@
  */
 const Router = require('koa-router');
 const log = new Router();
-const CustomError = require('../utils/custom-error');
-
 const logService = require('../services/log');
 // auth identify  middleware
 log.use(async (ctx, next) => {
@@ -12,7 +10,9 @@ log.use(async (ctx, next) => {
     if (userInfo && userInfo['id']) {
         return await next();
     } else {
-        throw new CustomError(401, 'need login');
+        let err = new Error('need login');
+        err.code = 401;
+        throw err;
     }
 });
 log.get('/getAll', async (ctx) => {

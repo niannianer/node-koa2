@@ -22,7 +22,7 @@ app.keys = ['koa session key'];
 const config = {
     key: 'koa:sessionID', /** (string) cookie key (default is koa:sess) */
     maxAge: 1000 * 60 * 60,
-    domain: 'zj-hf.cn',
+    domain: 'koa-dev.zj-hf.cn',// 指定了 cookie 将要被发送至哪个或哪些域中
     overwrite: true, /** (boolean) can overwrite or not (default true) */
     httpOnly: true, /** (boolean) httpOnly or not (default true) */
     signed: true, /** (boolean) signed or not (default true) */

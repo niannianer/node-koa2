@@ -2,18 +2,16 @@
  * Created by DELL on 2017/11/24.
  */
 const func = require('../utils/func');
-const CustomError = require('../utils/custom-error');
 const User = require('../models/user');
 const user = {};
 user.register = async (ctx) => {
     let {body} = ctx.request;
-    if (!body) {
-        throw new CustomError(400, 'arguments is need ');
-    }
     let {mobile, password, userName} = body;
     let user_name = userName || '';
     if (!mobile || !password) {
-        throw new CustomError(400, 'arguments error ');
+        let err = new Error('arguments error');
+        err.code = 400;
+        throw err;
     }
     let users = await new User({mobile}).fetch()
         .then(users => {
@@ -24,18 +22,20 @@ user.register = async (ctx) => {
             }
         });
     if (users) {
-        throw  new CustomError(402, ' this mobile has registered ');
+        let err = new Error('this mobile has registered');
+        err.code = 402;
+        throw err;
     }
     return new User({mobile, password, user_name}).save();
 };
 user.login = async (ctx) => {
     let {body} = ctx.request;
-    if (!body) {
-        throw new CustomError(400, 'arguments is need ');
-    }
     let {mobile, password} = body;
     if (!mobile || !password) {
-        throw new CustomError(400, 'arguments error ');
+        let err = new Error('arguments error');
+        err.code = 400;
+        throw err;
+
     }
     let userInfo = await  new User({mobile, password}).fetch()
         .then(users => {
@@ -43,7 +43,9 @@ user.login = async (ctx) => {
                 return users.toJSON();
             }
             else {
-                throw new CustomError(403, 'password or mobile error');
+                let err = new Error('password or mobile error');
+                err.code = 403;
+                throw err;
             }
 
         });
