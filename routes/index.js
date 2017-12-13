@@ -24,7 +24,7 @@ const init = (app) => {
         await  next();
     });
     // add error hand middleware
-    router.use(async (ctx, next) => {
+    app.use(async (ctx, next) => {
         try {
             let data = await  next();
             ctx.body = {

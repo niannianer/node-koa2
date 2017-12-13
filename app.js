@@ -35,12 +35,11 @@ app.use(session(config, app));
 routes.init(app);
 
 // catch 404 error ;
-app.use(async (ctx) => {
-    ctx.body = {
-        code: 404,
-        msg: 'not found'
-    }
-})
+app.use(async () => {
+    let err = new Error('not found');
+    err.code = 404;
+    throw err;
+});
 
 // start server at port 3000
 app.listen(3000, () => {
