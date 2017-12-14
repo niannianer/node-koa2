@@ -1,11 +1,11 @@
-# 前后端分离思想
+# 前后端分离
 * 前端和后端代码分别部署在不同的服务器。
 * 后端只需向前端提供json接口，接口只需返回请求正确或者失败原因。
 * 前端在开发过程中不必等待后端提供接口，可先自行约定接口数据模型。
 * 哪些网站适合前后端分离：
-  - 该网站前端变化远比后端变化频繁
-  - 该网站前端团队和后端团队技能点差异很大
-  - 该网站前端效果绚丽/跨设备兼容要求高
+  - 网站前端变化远比端变化频繁
+  - 网站前端团队和后端团队技能点差异大
+  - 网站前端效果绚丽/跨设备兼容要求高
 * 前后端分离主要有如下技术难点
   -  跨域请求
   - 身份认证
@@ -19,6 +19,7 @@
 * 当一个资源从与该资源本身所在的服务器不同的源请求一个资源时，
 资源会发起一个跨域 HTTP 请求。
 * 出于安全考虑，浏览器会限制从脚本内发起的跨域HTTP请求。
+* 也可能是跨站请求可以正常发起，但是返回结果被浏览器拦截了。
     * XMLHttpRequest 或 Fetch 发起的跨域 HTTP 请求。
     * Web 字体 (CSS 中通过 @font-face 使用跨域字体资源)。
     * 使用 drawImage 将 Images/video 画面绘制到 canvas。
@@ -27,7 +28,7 @@
  ## 跨域资源共享（ CORS ）
   * 跨域资源共享（ CORS ）机制允许 Web 应用服务器进行跨域访问控制，从而使跨域数据传输得以安全进行。
   * 浏览器支持在 API 容器中（例如 XMLHttpRequest 或 Fetch ）使用 CORS，以降低跨域 HTTP 请求所带来的风险。
-  * CORS 需要客户端和服务器同时支持。目前，所有浏览器都支持该机制（IE 10 提供了对规范的完整支持，但在较早版本（8 和 9）中，
+  * CORS 需要客户端和服务器同时支持。目前，所有浏览器都支持该机制（IE 10 提供了对规范的完整支持，但在较早版本中，
    CORS 机制是借由 XDomainRequest 对象完成）。
    
 ```javascript
@@ -48,13 +49,11 @@
 ```
 
 ## 预检请求
-*  “需预检的请求”要求必须先使用 OPTIONS   
-方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。
+*  “需预检的请求”要求必须先使用 OPTIONS方法发起一个预检请求到服务器，以获知服务器是否允许该实际请求。
 * "预检请求“的使用，可以避免跨域请求对服务器的用户数据产生未预期的影响。
 * 下列情况下需先发送预检请求。
    * 使用了下面任一 HTTP 方法：PUT，DELETE，CONNECT，OPTIONS，TRACE，PATCH。
-   * 人为设置了对 CORS 安全的首部字段集合之外的其他首部字段。
-   该集合为：Accept，Accept-Language，Content-Language，Content-Type，DPR，Downlink，Save-Data，Viewport-Width，Width。
+   * 人为设置了对 CORS 安全的首部字段集合之外的其他首部字段。该集合为：Accept，Accept-Language，Content-Language，Content-Type，DPR，Downlink，Save-Data，Viewport-Width，Width。
    * Content-Type 的值不属于下列之一:application/x-www-form-urlencoded，multipart/form-data，text/plain
 
 ```javascript
@@ -85,7 +84,7 @@
          ctx.set('Access-Control-Max-Age', 24*60*60); // 设置预检请求缓存时间
          let method = ctx.method;
          if ('OPTIONS' === method) {
-               ctx.status = 204;// 204 表示告知客户端相应成功
+              ctx.status = 204;// 不返回任何实体
          }
          await  next();
      });
@@ -102,10 +101,8 @@
  * 简单请求将直接发送实际请求。
    
 ##  附带身份凭证的请求--cookie
-* Fetch 与 CORS 的一个特性是，可以基于  HTTP cookies 
-和 HTTP 认证信息发送身份凭证。对于跨域 XMLHttpRequest 或 Fetch 请求，
-浏览器默认不会发送身份凭证信息。如果要发送凭证信息，
-需要设置 XMLHttpRequest 的某个特殊标志位--withCredentials。
+*  CORS 的一个特性是，可以基于  HTTP cookies 和 HTTP 认证信息发送身份凭证。对于跨域 XMLHttpRequest 或 Fetch 请求，浏览器默认不会
+   发送身份凭证信息。如果要发送凭证信息，需要设置 XMLHttpRequest 的某个特殊标志位--withCredentials。
 
 ```javascript
 // client
@@ -113,7 +110,7 @@
 //  user login
    var request = new XMLHttpRequest();
    var url = 'https://zj-weixin.zj-hf.cn/login';
-   var body = 'mobile=13720057698&password=hxx123456'; // application/x-www-form-urlencoded 格式
+   var body = 'mobile=13720057698&password=hxx123456'; // application/x-www-form-urlencoded 
    request.open('POST', url, true);
    request.withCredentials = true; // 携带身份信息
    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // 
@@ -135,8 +132,9 @@ user.login = async (ctx) => {
           'cid', 
          userInfo,
           {
-            domain: 'zj-hf.cn',  // 写cookie所在的域名
-            path: '/',       // 写cookie所在的路径
+            domain: 'zj-hf.cn',  // 指定了需要发送Cookie的域名
+            path: '/',       // 指定了需要发送Cooki的路径
+            maxAge:60*60,   // 有效时长 
             expires: new Date('2018-02-15'),  // cookie失效时间
             httpOnly: false,  // 是否只用于http请求中获取
             overwrite: false  // 是否允许重写
@@ -199,6 +197,7 @@ user.getInfo = async (ctx) => {
   ```
   
   * 当服务端把用户信息清空之后（比如服务重启，清空redis等操作），用户登录状态消失。
+  * 使用不当存在安全隐患([XSS攻击](https://baike.baidu.com/item/XSS%E6%94%BB%E5%87%BB/954065?fr=aladdin)和[CSRF攻击](https://en.wikipedia.org/wiki/HTTP_cookie#Cross-site_request_forgery))
 
 ##  附带身份凭证的请求--token
 
@@ -231,14 +230,14 @@ localStorage.setItem('auth_token',data.token);
 ```javascript
  var request = new XMLHttpRequest();
  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // 
- request.setRequestHeader('Auth-Token', localStorage.getItem('auth_token')); // 
+ request.setRequestHeader('X-Token', localStorage.getItem('auth_token')); // 
 ```
 
 * 服务端收到请求，验证Token，如果成功，就向客户端返回请求的数据
 
 ```javascript
-     ctx.set('Access-Control-Allow-Headers', 'Content-Type,Auth-Token');
-     let  token = ctx.get('Auth-Token');
+     ctx.set('Access-Control-Allow-Headers', 'Content-Type,X-Token');
+     let  token = ctx.get('X-Token');
      verify(token);
 ```
 
