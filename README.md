@@ -1,6 +1,6 @@
 # KOA
 
-> koa project
+>a  koa project
 
 ## Build Setup
 * install mysql
